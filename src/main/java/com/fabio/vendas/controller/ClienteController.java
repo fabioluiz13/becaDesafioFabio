@@ -2,6 +2,8 @@ package com.fabio.vendas.controller;
 
 
 import com.fabio.vendas.model.Cliente;
+import com.fabio.vendas.services.ClienteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,50 +13,32 @@ import java.util.List;
 @RequestMapping(value = "/cliente")
 public class ClienteController {
 
-
+    @Autowired
+    private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<Cliente> Criar(@RequestBody Cliente cliente) {
-
-        cliente.setId(1L);
-        return ResponseEntity.created(null).body(cliente);
+    public ResponseEntity<Cliente> criar(@RequestBody Cliente cliente) {
+        Cliente clienteCriado = clienteService.criar(cliente);
+        return ResponseEntity.created(null).body(clienteCriado);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Cliente> atualizar(@RequestBody Cliente cliente, @PathVariable Long id) {
-        cliente.setId(id);
-        return ResponseEntity.ok(cliente);
-
+        Cliente clienteAtualizado = clienteService.atualizar(cliente, id);
+        return ResponseEntity.ok(clienteAtualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletar(@PathVariable Long id) {
+        clienteService.deletar(id);
         return ResponseEntity.noContent().build();
 
     }
 
     @GetMapping
     public ResponseEntity<List<Cliente>> listar() {
-
-        Cliente cliente1 =  new Cliente();
-        cliente1.setId(1L);
-        cliente1.setNome("Fabio");
-        cliente1.setCpf("111.222.333-99");
-        cliente1.setEndereco("Rua Japão");
-
-        Cliente cliente2 =  new Cliente();
-        cliente2.setId(2L);
-        cliente2.setNome("Ester");
-        cliente2.setCpf("222.333.444-99");
-        cliente2.setEndereco("Rua Acre");
-
-        Cliente cliente3 =  new Cliente();
-        cliente3.setId(3L);
-        cliente3.setNome("Aguiar");
-        cliente3.setCpf("333.444.555-99");
-        cliente3.setEndereco("Rua Fortaleza");
-
-        return ResponseEntity.ok().body(List.of(cliente1, cliente2, cliente3));
+        List<Cliente> listaCliente = clienteService.listar();
+        return ResponseEntity.ok().body(listaCliente);
     }
 
 }
