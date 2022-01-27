@@ -1,0 +1,42 @@
+# Cria a lista de pedidos com todos seus atributos.
+POST http://0.0.0.0:8080/pedidos
+Tipo de conteudo: aplicacao/json
+
+{
+  "id": 1,
+  "data": "2022-01-26",
+  "items": [
+    {
+      "id": 1,
+      "preco": 15.55,
+      "quantidade": 3,
+      "produto": {
+        "id": 2,
+        "descricao": "Café",
+        "preco": 15.55
+      }
+    }
+  ],
+  "cliente": {
+    "id": 3,
+    "nome": "Osvaldo",
+    "cpf": "111.222.333-88",
+    "endereco": "Rua Acre"
+  }
+}
+
+###
+# Retorna uma lista de todos produtos criados.
+GET http://0.0.0.0:8080/produto
+
+###
+# Retorna a lista de pedidos feito pelo cliente.
+GET http://0.0.0.0:8080/pedidos
+
+###
+# Retorna uma lista com de quantidade e seu produto
+GET http://0.0.0.0:8080/item
+
+###
+# Retorna uma lista de clientes
+GET http://0.0.0.0:8080/cliente
