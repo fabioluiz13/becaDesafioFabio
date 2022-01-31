@@ -1,64 +1,50 @@
 package com.fabio.vendas.services;
 
-import com.fabio.vendas.model.ItemPedido;
-import com.fabio.vendas.model.Produto;
+import com.fabio.vendas.models.ItemPedido;
+import com.fabio.vendas.models.Produto;
+import com.fabio.vendas.repositories.ItemPedidoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class ItemPedidoService {
 
+    @Autowired
+    private ProdutoService produtoService;
+
+    @Autowired
+    private ItemPedidoRepository itemPedidoRepository;
+
     public ItemPedido Criar(ItemPedido itemPedido) {
-        itemPedido.setId(3L);
-        return itemPedido;
+        Produto produtoObtido = produtoService.obter(itemPedido.getProduto().getId());
+        itemPedido.setProduto(produtoObtido);
+        ItemPedido itemPedidoCriado  = itemPedidoRepository.save(itemPedido);
+        return itemPedidoCriado;
     }
 
     public ItemPedido atualizar(ItemPedido itemPedido, Long id) {
-        itemPedido.setId(id);
-        return itemPedido;
+        ItemPedido itemPedidoObtido = this.obter(id);
+        itemPedidoObtido.setProduto(itemPedido.getProduto());
+        itemPedidoObtido.setQuantidade(itemPedido.getQuantidade());
+        itemPedidoObtido.setPreco(itemPedido.getPreco());
+        itemPedidoRepository.save(itemPedidoObtido);
+        return itemPedidoObtido;
     }
 
     public void deletar( Long id) {
-       //
+        itemPedidoRepository.deleteById(id);
     }
 
     public List<ItemPedido> listar() {
+        List<ItemPedido> listaItem = itemPedidoRepository.findAll();
+        return listaItem;
+    }
 
-        Produto produto1 = new Produto();
-        produto1.setId(1L);
-        produto1.setDescricao("Arroz Parborizado");
-        produto1.setPreco(14.99);
 
-        Produto produto2 = new Produto();
-        produto2.setId(1L);
-        produto2.setDescricao("Arroz Integral");
-        produto2.setPreco(19.99);
-
-        Produto produto3 = new Produto();
-        produto3.setId(1L);
-        produto3.setDescricao("Arroz Aguilinha");
-        produto3.setPreco(22.56);
-
-        ItemPedido pedido1 = new ItemPedido();
-        pedido1.setId(4L);
-        pedido1.setPreco(12.55);
-        pedido1.setQuantidade(2);
-        pedido1.setProduto(produto3);
-
-        ItemPedido pedido2 = new ItemPedido();
-        pedido2.setId(5L);
-        pedido2.setPreco(20.99);
-        pedido2.setQuantidade(4);
-        pedido2.setProduto(produto2);
-
-        ItemPedido pedido3 = new ItemPedido();
-        pedido3.setId(6L);
-        pedido3.setPreco(8.56);
-        pedido3.setQuantidade(10);
-        pedido3.setProduto(produto1);
-
-        return List.of(pedido1, pedido2, pedido3);
+    public ItemPedido obter(Long id) {
+        ItemPedido itemPedido = itemPedidoRepository.findById(id).get();
+        return itemPedido;
     }
 }

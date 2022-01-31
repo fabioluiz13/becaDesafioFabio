@@ -1,19 +1,21 @@
-package com.fabio.vendas.controller;
+package com.fabio.vendas.controllers;
 
-import com.fabio.vendas.model.Pedido;
+import com.fabio.vendas.models.Pedido;
 import com.fabio.vendas.services.PedidoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/pedidos")
 public class PedidoController {
 
-    @Autowired
-    private PedidoService pedidoService;
+
+    private final PedidoService pedidoService;
 
     @PostMapping
     public ResponseEntity<Pedido> criar(@RequestBody Pedido pedido) {
@@ -35,8 +37,14 @@ public class PedidoController {
 
     @GetMapping
     public ResponseEntity<List<Pedido>> listar() {
-        List<Pedido> listaPedido = pedidoService.listar();
-        return ResponseEntity.ok().body(listaPedido);
+        List<Pedido> pedidos = pedidoService.listar();
+        return ResponseEntity.ok().body(pedidos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Pedido> obter(@PathVariable Long id){
+        Pedido pedidoObtido = pedidoService.obter(id);
+        return ResponseEntity.ok(pedidoObtido);
     }
 
 }
