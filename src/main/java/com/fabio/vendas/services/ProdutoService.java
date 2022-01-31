@@ -1,6 +1,8 @@
 package com.fabio.vendas.services;
 
-import com.fabio.vendas.model.Produto;
+import com.fabio.vendas.models.Produto;
+import com.fabio.vendas.repositories.ProdutoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,49 +10,39 @@ import java.util.List;
 @Service
 public class ProdutoService {
 
-    public Produto criar( Produto produto){
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
-        produto.setId(1L);
-        return produto;
+    public Produto criar( Produto produto){
+        Produto produtoSalvo = produtoRepository.save(produto);
+        return produtoSalvo;
     }
 
-
     public Produto atualizar( Produto produto,  Long id){
-        produto.setId(id);
-        return  produto;
+        Produto produtoObtido = this.obter(id);
+        produtoObtido.setDescricao(produto.getDescricao());
+        produtoObtido.setPreco(produto.getPreco());
+        produtoObtido.setPreco(produto.getPreco());
+        produtoRepository.save(produtoObtido);
+        return  produtoObtido;
     }
 
     public void deletar( Long id){
-      //
+      produtoRepository.deleteById(id);
     }
 
     public List<Produto> listar(){
-
-        Produto prod1 = new Produto();
-        prod1.setId(2L);
-        prod1.setDescricao("Arroz");
-        prod1.setPreco(15.89);
-
-        Produto prod2 = new Produto();
-        prod2.setId(3L);
-        prod2.setDescricao("Feijão");
-        prod2.setPreco(7.56);
-
-        Produto prod3 = new Produto();
-        prod3.setId(4L);
-        prod3.setDescricao("Oleo");
-        prod3.setPreco(8.99);
-
-        return  List.of(prod1, prod2, prod3);
+        List<Produto> listaProduto = produtoRepository.findAll();
+        return listaProduto;
     }
 
     public Produto obter( Long id){
-        Produto prod1 = new Produto();
-        prod1.setId(id);
-        prod1.setDescricao("Arroz");
-        prod1.setPreco(15.89);
-
-        return prod1;
+        Produto produto = produtoRepository.findById(id).get();
+        if (produto == null){
+            throw new RuntimeException("Produto não encontrado");
+        }
+        return produto;
     }
+
 }
 

@@ -1,7 +1,6 @@
-package com.fabio.vendas.controller;
+package com.fabio.vendas.controllers;
 
-
-import com.fabio.vendas.model.Produto;
+import com.fabio.vendas.models.Produto;
 import com.fabio.vendas.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @PostMapping
-    public ResponseEntity<Produto> riar(@RequestBody Produto produto){
+    public ResponseEntity<Produto> criar(@RequestBody Produto produto){
         Produto materiaCriada = produtoService.criar(produto);
         return ResponseEntity.created(null).body(materiaCriada);
     }
@@ -37,12 +36,12 @@ public class ProdutoController {
     @GetMapping
     public ResponseEntity<List<Produto>> listar(){
         List<Produto> listaProdutos = produtoService.listar();
-        return  ResponseEntity.ok().body( listaProdutos);
+        return  ResponseEntity.ok(listaProdutos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Produto> obter(@PathVariable Long id){
        Produto produtoObtido =  produtoService.obter(id);
         return ResponseEntity.ok(produtoObtido);
-    }
+   }
 }

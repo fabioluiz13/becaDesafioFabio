@@ -1,7 +1,8 @@
-package com.fabio.vendas.controller;
+package com.fabio.vendas.controllers;
 
 
-import com.fabio.vendas.model.Cliente;
+import com.fabio.vendas.models.Cliente;
+import com.fabio.vendas.models.Pedido;
 import com.fabio.vendas.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,6 @@ public class ClienteController {
     public ResponseEntity<String> deletar(@PathVariable Long id) {
         clienteService.deletar(id);
         return ResponseEntity.noContent().build();
-
     }
 
     @GetMapping
@@ -40,5 +40,4 @@ public class ClienteController {
         List<Cliente> listaCliente = clienteService.listar();
         return ResponseEntity.ok().body(listaCliente);
     }
-
 }

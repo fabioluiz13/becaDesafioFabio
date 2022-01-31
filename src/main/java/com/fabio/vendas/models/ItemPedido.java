@@ -1,10 +1,20 @@
-package com.fabio.vendas.model;
+package com.fabio.vendas.models;
 
-public class ItemPedido {
+import javax.persistence.*;
 
+@Entity
+public class ItemPedido  {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double preco;
     private int quantidade;
+
+
+    @ManyToOne
+    @JoinColumn(name = "produto_id")
     private Produto produto;
 
     public ItemPedido(){}
@@ -46,5 +56,5 @@ public class ItemPedido {
 
     public void setProduto(Produto produto) {
         this.produto = produto;
-    }
+   }
 }

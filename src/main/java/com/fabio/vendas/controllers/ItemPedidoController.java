@@ -1,6 +1,7 @@
-package com.fabio.vendas.controller;
+package com.fabio.vendas.controllers;
 
-import com.fabio.vendas.model.ItemPedido;
+import com.fabio.vendas.models.Cliente;
+import com.fabio.vendas.models.ItemPedido;
 import com.fabio.vendas.services.ItemPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,14 @@ public class ItemPedidoController {
 
     @GetMapping
     public ResponseEntity<List<ItemPedido>> listar() {
-        List<ItemPedido> listaItem = itemPedidoService.listar();
-        return ResponseEntity.ok().body(listaItem);
+        List<ItemPedido> pedidos = itemPedidoService.listar();
+        return ResponseEntity.ok().body(pedidos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ItemPedido> obter(@PathVariable Long id){
+        ItemPedido pedidoObtido = itemPedidoService.obter(id);
+        return ResponseEntity.ok(pedidoObtido);
     }
 
 }

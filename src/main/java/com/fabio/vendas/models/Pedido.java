@@ -1,21 +1,28 @@
-package com.fabio.vendas.model;
+package com.fabio.vendas.models;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Entity
 public class Pedido {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate data;
-    private List<ItemPedido> items;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    public Pedido(){}
+    public Pedido() {
+    }
 
-    public Pedido(Long id, LocalDate data, List<ItemPedido> items, Cliente cliente) {
+    public Pedido(Long id, LocalDate data, List<ItemPedido> pedidos, Cliente cliente) {
         this.id = id;
         this.data = data;
-        this.items = items;
+
         this.cliente = cliente;
     }
 
@@ -33,14 +40,6 @@ public class Pedido {
 
     public void setData(LocalDate data) {
         this.data = data;
-    }
-
-    public List<ItemPedido> getItems() {
-        return items;
-    }
-
-    public void setItems(List<ItemPedido> items) {
-        this.items = items;
     }
 
     public Cliente getCliente() {
