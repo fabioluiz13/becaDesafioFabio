@@ -6,39 +6,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ClienteService  {
+public class ClienteService {
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteRepository repository;
 
     public Cliente criar(Cliente cliente) {
-        Cliente clienteCriado = clienteRepository.save(cliente);
-        return clienteCriado;
+        Cliente clientesalvo = repository.save(cliente);
+        return clientesalvo;
     }
 
     public Cliente atualizar(Cliente cliente, Long id) {
-        Cliente obterCliente = this.Obter(id);
-        obterCliente.setNome(cliente.getNome());
-        obterCliente.setCpf(cliente.getCpf());
-        obterCliente.setEndereco(cliente.getEndereco());
-        Cliente cliente1 = clienteRepository.save(obterCliente);
-        return cliente1;
-
+        Cliente clienteObtido = this.Obter(id);
+        clienteObtido.setNome(cliente.getNome());
+        clienteObtido.setCpf(cliente.getCpf());
+        clienteObtido.setEndereco(cliente.getEndereco());
+        repository.save(clienteObtido);
+        return clienteObtido;
     }
 
     public void deletar(Long id) {
-      clienteRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
     public List<Cliente> listar() {
-        return clienteRepository.findAll();
-
+        return repository.findAll();
     }
-    public Cliente Obter (Long id){
-        Optional<Cliente> obterCliente = clienteRepository.findById(id);
-        return obterCliente.get();
+
+    public Cliente Obter(Long id) {
+        Cliente cliente = repository.findById(id).get();
+        return cliente;
     }
 }

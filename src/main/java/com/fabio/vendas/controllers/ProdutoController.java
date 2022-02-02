@@ -1,5 +1,6 @@
 package com.fabio.vendas.controllers;
 
+import com.fabio.vendas.dtos.ProdutoDto;
 import com.fabio.vendas.models.Produto;
 import com.fabio.vendas.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,32 +17,31 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @PostMapping
-    public ResponseEntity<Produto> criar(@RequestBody Produto produto){
-        Produto materiaCriada = produtoService.criar(produto);
-        return ResponseEntity.created(null).body(materiaCriada);
+    public ResponseEntity<ProdutoDto> criar(@RequestBody ProdutoDto produtoDto) {
+
+        return ResponseEntity.created(null).body(produtoService.criar(produtoDto));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(@RequestBody Produto produto, @PathVariable Long id){
-        Produto produtoAtualizado = produtoService.atualizar(produto, id);
-        return  ResponseEntity.ok().body(produtoAtualizado);
+    public ResponseEntity<ProdutoDto> atualizar(@RequestBody ProdutoDto produtoDto, @PathVariable Long id) {
+        return ResponseEntity.ok().body(produtoService.atualizar(produtoDto, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletar(@PathVariable Long id){
-        produtoService.deletar(id);
+    public ResponseEntity<Produto> deletar(@PathVariable Long id) {
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> listar(){
-        List<Produto> listaProdutos = produtoService.listar();
-        return  ResponseEntity.ok(listaProdutos);
+    public ResponseEntity<List<ProdutoDto>> listar() {
+        List<ProdutoDto> listar = produtoService.listar();
+        return ResponseEntity.ok().body(listar);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> obter(@PathVariable Long id){
-       Produto produtoObtido =  produtoService.obter(id);
-        return ResponseEntity.ok(produtoObtido);
-   }
+    public ResponseEntity<ProdutoDto> obter(@PathVariable Long id) {
+        ProdutoDto produtoDtoObtido = produtoService.obter(id);
+        return ResponseEntity.ok().body(produtoDtoObtido);
+
+    }
 }

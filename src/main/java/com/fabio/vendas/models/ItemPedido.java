@@ -1,5 +1,7 @@
 package com.fabio.vendas.models;
 
+import com.fabio.vendas.dtos.ItemPedidoDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,6 +20,12 @@ public class ItemPedido  {
     private Produto produto;
 
     public ItemPedido(){}
+
+    public ItemPedido(ItemPedidoDto itemPedidoDto){
+      this.preco = itemPedidoDto.getPreco();
+      this.quantidade = itemPedidoDto.getQuantidade();
+      this.produto = itemPedidoDto.getProduto();
+    }
 
     public ItemPedido(Long id, Double preco, int quantidade, Produto produto) {
         this.id = id;

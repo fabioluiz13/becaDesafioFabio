@@ -2,7 +2,6 @@ package com.fabio.vendas.controllers;
 
 
 import com.fabio.vendas.models.Cliente;
-import com.fabio.vendas.models.Pedido;
 import com.fabio.vendas.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +18,14 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<Cliente> criar(@RequestBody Cliente cliente) {
-        Cliente clienteCriado = clienteService.criar(cliente);
-        return ResponseEntity.created(null).body(clienteCriado);
+        Cliente clineteCriado = clienteService.criar(cliente);
+        return ResponseEntity.created(null).body(clineteCriado);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Cliente> atualizar(@RequestBody Cliente cliente, @PathVariable Long id) {
         Cliente clienteAtualizado = clienteService.atualizar(cliente, id);
-        return ResponseEntity.ok(clienteAtualizado);
+        return ResponseEntity.ok().body(clienteAtualizado);
     }
 
     @DeleteMapping("/{id}")

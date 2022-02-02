@@ -1,11 +1,16 @@
 package com.fabio.vendas.services;
 
+import com.fabio.vendas.dtos.ItemPedidoDto;
+import com.fabio.vendas.dtos.PedidoDto;
 import com.fabio.vendas.models.ItemPedido;
+import com.fabio.vendas.models.Pedido;
 import com.fabio.vendas.models.Produto;
 import com.fabio.vendas.repositories.ItemPedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.ResolutionException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,34 +22,33 @@ public class ItemPedidoService {
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
 
-    public ItemPedido Criar(ItemPedido itemPedido) {
-        Produto produtoObtido = produtoService.obter(itemPedido.getProduto().getId());
-        itemPedido.setProduto(produtoObtido);
-        ItemPedido itemPedidoCriado  = itemPedidoRepository.save(itemPedido);
-        return itemPedidoCriado;
+    public ItemPedidoDto criar(ItemPedidoDto pedidoDto) {
+        ItemPedido pedido = new ItemPedido(pedidoDto);
+        return  new ItemPedidoDto(itemPedidoRepository.save(pedido));
     }
 
-    public ItemPedido atualizar(ItemPedido itemPedido, Long id) {
-        ItemPedido itemPedidoObtido = this.obter(id);
-        itemPedidoObtido.setProduto(itemPedido.getProduto());
-        itemPedidoObtido.setQuantidade(itemPedido.getQuantidade());
-        itemPedidoObtido.setPreco(itemPedido.getPreco());
-        itemPedidoRepository.save(itemPedidoObtido);
-        return itemPedidoObtido;
+
+    public ItemPedidoDto atualizar( ItemPedidoDto itemPedidoDto, Long id) {
+        return new ItemPedidoDto(itemPedidoRepository.findById(id)
+                .map(itemPedido -> itemPedidoRepository.save(new ItemPedido(itemPedidoDto)))
+                .orElseThrow(ResolutionException::new));
     }
 
     public void deletar( Long id) {
         itemPedidoRepository.deleteById(id);
     }
 
-    public List<ItemPedido> listar() {
-        List<ItemPedido> listaItem = itemPedidoRepository.findAll();
-        return listaItem;
+    public List<ItemPedidoDto> listar() {
+        List<ItemPedidoDto> itemPedidoDtos = new ArrayList<>();
+        List<ItemPedido> listaProduto = itemPedidoRepository.findAll();
+        listaProduto.stream().forEach(item -> itemPedidoDtos.add(new ItemPedidoDto(item)));
+
+        return itemPedidoDtos;
     }
 
-
-    public ItemPedido obter(Long id) {
+    public ItemPedidoDto obter(Long id) {
         ItemPedido itemPedido = itemPedidoRepository.findById(id).get();
-        return itemPedido;
+        return new ItemPedidoDto(itemPedido);
+
     }
 }

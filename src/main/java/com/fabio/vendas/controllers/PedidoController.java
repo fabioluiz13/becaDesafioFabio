@@ -1,5 +1,6 @@
 package com.fabio.vendas.controllers;
 
+import com.fabio.vendas.dtos.PedidoDto;
 import com.fabio.vendas.models.Pedido;
 import com.fabio.vendas.services.PedidoService;
 import lombok.RequiredArgsConstructor;
@@ -18,33 +19,31 @@ public class PedidoController {
     private final PedidoService pedidoService;
 
     @PostMapping
-    public ResponseEntity<Pedido> criar(@RequestBody Pedido pedido) {
-        Pedido pedidoCriado = pedidoService.criar(pedido);
-        return ResponseEntity.created(null).body(pedidoCriado);
+    public ResponseEntity<PedidoDto> criar(@RequestBody PedidoDto pedidoDto) {
+        return ResponseEntity.created(null).body(pedidoService.criar(pedidoDto));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Pedido> atualizar(@RequestBody Pedido pedido, @PathVariable Long id) {
-        Pedido pedidoAtualizado = pedidoService.atualizar(pedido, id);
-        return ResponseEntity.ok().body(pedidoAtualizado);
+    public ResponseEntity<PedidoDto> atualizar(@RequestBody PedidoDto pedidoDto, @PathVariable Long id) {
+        return ResponseEntity.ok().body(pedidoService.atualizar(pedidoDto, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletar(@PathVariable Long id) {
-        pedidoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Pedido>> listar() {
-        List<Pedido> pedidos = pedidoService.listar();
-        return ResponseEntity.ok().body(pedidos);
+    public ResponseEntity<List<PedidoDto>> listar() {
+        List<PedidoDto> listaObtida = pedidoService.listar();
+        return ResponseEntity.ok().body(listaObtida);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> obter(@PathVariable Long id){
-        Pedido pedidoObtido = pedidoService.obter(id);
-        return ResponseEntity.ok(pedidoObtido);
+    public ResponseEntity<PedidoDto> obter(@PathVariable Long id){
+
+        PedidoDto pedidoDtoObtido = pedidoService.obter(id);
+        return ResponseEntity.ok().body(pedidoDtoObtido);
     }
 
 }

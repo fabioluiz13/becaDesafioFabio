@@ -1,5 +1,8 @@
 package com.fabio.vendas.models;
 
+import com.fabio.vendas.dtos.PedidoDto;
+import com.fabio.vendas.dtos.ProdutoDto;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,10 +22,14 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(Long id, LocalDate data, List<ItemPedido> pedidos, Cliente cliente) {
+    public Pedido(PedidoDto pedidoDto) {
+        this.data = pedidoDto.getData();
+        this.cliente = pedidoDto.getCliente();
+    }
+
+    public Pedido(Long id, LocalDate data, Cliente cliente) {
         this.id = id;
         this.data = data;
-
         this.cliente = cliente;
     }
 

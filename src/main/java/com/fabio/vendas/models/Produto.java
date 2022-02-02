@@ -1,5 +1,7 @@
 package com.fabio.vendas.models;
 
+import com.fabio.vendas.dtos.ProdutoDto;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,7 +16,14 @@ public class Produto {
     private String descricao;
     private Double preco;
 
+
     public Produto() {
+    }
+
+    public Produto(ProdutoDto produtoDto){
+        this.descricao = produtoDto.getDescricao();
+        this.preco = produtoDto.getPreco();
+
     }
 
     public Produto(Long id, String descricao, Double preco) {
