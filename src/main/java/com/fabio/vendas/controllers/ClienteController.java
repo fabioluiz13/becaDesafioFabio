@@ -3,23 +3,25 @@ package com.fabio.vendas.controllers;
 
 import com.fabio.vendas.models.Cliente;
 import com.fabio.vendas.services.ClienteService;
+import com.fabio.vendas.validations.Validacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/cliente")
-public class ClienteController {
+public class ClienteController extends Validacao {
 
     @Autowired
     private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<Cliente> criar(@RequestBody Cliente cliente) {
-        Cliente clineteCriado = clienteService.criar(cliente);
-        return ResponseEntity.created(null).body(clineteCriado);
+    public ResponseEntity<Cliente> criar(@RequestBody @Valid Cliente cliente) {
+        Validacao validacao =new Validacao();
+        return ResponseEntity.created(null).body(clienteService.criar(cliente));
     }
 
     @PatchMapping("/{id}")
@@ -39,4 +41,6 @@ public class ClienteController {
         List<Cliente> listaCliente = clienteService.listar();
         return ResponseEntity.ok().body(listaCliente);
     }
+
+
 }

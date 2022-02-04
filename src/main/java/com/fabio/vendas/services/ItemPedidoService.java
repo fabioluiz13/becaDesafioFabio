@@ -1,10 +1,7 @@
 package com.fabio.vendas.services;
 
 import com.fabio.vendas.dtos.ItemPedidoDto;
-import com.fabio.vendas.dtos.PedidoDto;
 import com.fabio.vendas.models.ItemPedido;
-import com.fabio.vendas.models.Pedido;
-import com.fabio.vendas.models.Produto;
 import com.fabio.vendas.repositories.ItemPedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

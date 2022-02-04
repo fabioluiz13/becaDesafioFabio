@@ -1,12 +1,8 @@
 package com.fabio.vendas.controllers;
 
 import com.fabio.vendas.dtos.ItemPedidoDto;
-import com.fabio.vendas.dtos.PedidoDto;
-import com.fabio.vendas.models.Cliente;
-import com.fabio.vendas.models.ItemPedido;
 import com.fabio.vendas.services.ItemPedidoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,13 +34,13 @@ public class ItemPedidoController {
     @GetMapping
     public ResponseEntity<List<ItemPedidoDto>> listar() {
         List<ItemPedidoDto> listaDto = itemPedidoService.listar();
-        return ResponseEntity.ok().body(listaDto);
+        return ResponseEntity.ok(listaDto);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ItemPedidoDto> obter(@PathVariable Long id) {
         ItemPedidoDto itemPedido = itemPedidoService.obter(id);
-        return ResponseEntity.ok().body(itemPedido);
+        return ResponseEntity.ok(itemPedido);
     }
 
 }

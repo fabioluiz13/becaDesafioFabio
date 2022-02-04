@@ -1,10 +1,8 @@
 package com.fabio.vendas.controllers;
 
 import com.fabio.vendas.dtos.PedidoDto;
-import com.fabio.vendas.models.Pedido;
 import com.fabio.vendas.services.PedidoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
