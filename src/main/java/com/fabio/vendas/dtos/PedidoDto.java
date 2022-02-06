@@ -3,16 +3,12 @@ package com.fabio.vendas.dtos;
 import com.fabio.vendas.models.Cliente;
 import com.fabio.vendas.models.Pedido;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 public class PedidoDto {
 
     private LocalDate data;
-
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    
     private Cliente cliente;
 
 

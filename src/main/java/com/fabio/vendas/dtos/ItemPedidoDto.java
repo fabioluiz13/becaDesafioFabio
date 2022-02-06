@@ -3,17 +3,11 @@ package com.fabio.vendas.dtos;
 import com.fabio.vendas.models.ItemPedido;
 import com.fabio.vendas.models.Produto;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 public class ItemPedidoDto {
 
 
     private Double preco;
     private int quantidade;
-
-    @ManyToOne
-    @JoinColumn(name = "produto_id")
     private Produto produto;
 
     public ItemPedidoDto() {
