@@ -1,42 +1,54 @@
 package com.fabio.vendas.services;
 
+import com.fabio.vendas.dtos.requests.ClienteResquest;
+import com.fabio.vendas.dtos.responses.ClienteResponse;
+import com.fabio.vendas.mappers.MapperClienteRequestToCliente;
+import com.fabio.vendas.mappers.MapperClienteAtualizar;
+import com.fabio.vendas.mappers.MapperClienteToClienteResponse;
 import com.fabio.vendas.models.Cliente;
 import com.fabio.vendas.repositories.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteService {
 
-    @Autowired
-    private ClienteRepository repository;
+    private final ClienteRepository repository;
+    private final MapperClienteRequestToCliente mapper;
+    private final MapperClienteAtualizar clienteAtualizar;
+    private final MapperClienteToClienteResponse mapperClienteToClienteResponse;
 
-    public Cliente criar(Cliente cliente) {
-        Cliente clientesalvo = repository.save(cliente);
-        return clientesalvo;
+
+    public ClienteResponse criar(ClienteResquest clienteResquest) {
+        Cliente cliente= mapper.toModel(clienteResquest);
+        return mapperClienteToClienteResponse.toResponse(repository.save(cliente));
     }
 
-    public Cliente atualizar(Cliente cliente, Long id) {
-        Cliente clienteObtido = this.Obter(id);
-        clienteObtido.setNome(cliente.getNome());
-        clienteObtido.setCpf(cliente.getCpf());
-        clienteObtido.setEndereco(cliente.getEndereco());
-        repository.save(clienteObtido);
-        return clienteObtido;
+    public ClienteResponse atualizar(ClienteResquest clienteResquest, Long id) {
+
+        Cliente cliente = repository.findById(id).get();
+        clienteAtualizar.atualizar(clienteResquest, cliente);
+        return mapperClienteToClienteResponse.toResponse(repository.save(cliente));
     }
 
     public void deletar(Long id) {
         repository.deleteById(id);
     }
 
-    public List<Cliente> listar() {
-        return repository.findAll();
+    public List<ClienteResponse> listar() {
+        List<Cliente> listaClientes = repository.findAll();
+        return listaClientes
+                .stream()
+                .map(mapperClienteToClienteResponse::toResponse)
+                .collect(Collectors.toList());
     }
 
-    public Cliente Obter(Long id) {
+    public ClienteResponse Obter(Long id) {
         Cliente cliente = repository.findById(id).get();
-        return cliente;
+        return mapperClienteToClienteResponse.toResponse(cliente);
     }
 }

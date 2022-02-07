@@ -1,6 +1,7 @@
 package com.fabio.vendas.controllers;
 
-import com.fabio.vendas.dtos.PedidoDto;
+import com.fabio.vendas.dtos.requests.PedidoRequest;
+import com.fabio.vendas.dtos.responses.PedidoResponse;
 import com.fabio.vendas.services.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,35 +14,35 @@ import java.util.List;
 @RequestMapping(value = "/pedidos")
 public class PedidoController {
 
-
     private final PedidoService pedidoService;
 
     @PostMapping
-    public ResponseEntity<PedidoDto> criar(@RequestBody PedidoDto pedidoDto) {
-        return ResponseEntity.created(null).body(pedidoService.criar(pedidoDto));
+    public ResponseEntity<PedidoResponse> criar(@RequestBody PedidoRequest pedidoRequest) {
+        PedidoResponse pedidoResponse = pedidoService.criar(pedidoRequest);
+        return ResponseEntity.created(null).body(pedidoResponse);
     }
 
+
     @PatchMapping("/{id}")
-    public ResponseEntity<PedidoDto> atualizar(@RequestBody PedidoDto pedidoDto, @PathVariable Long id) {
-        return ResponseEntity.ok().body(pedidoService.atualizar(pedidoDto, id));
+    public ResponseEntity<PedidoResponse> atualizar(@RequestBody PedidoRequest pedidoRequest, @PathVariable Long id) {
+        return ResponseEntity.ok().body(pedidoService.atualizar(pedidoRequest, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        pedidoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<PedidoDto>> listar() {
-        List<PedidoDto> listaObtida = pedidoService.listar();
-        return ResponseEntity.ok().body(listaObtida);
+    public ResponseEntity<List<PedidoResponse>> listar() {
+        List<PedidoResponse> listaPedido = pedidoService.listar();
+        return ResponseEntity.ok(listaPedido);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoDto> obter(@PathVariable Long id){
-
-        PedidoDto pedidoDtoObtido = pedidoService.obter(id);
-        return ResponseEntity.ok().body(pedidoDtoObtido);
+    public ResponseEntity<PedidoResponse> obter(@PathVariable Long id){
+        return ResponseEntity.ok(pedidoService.obter(id));
     }
 
 }

@@ -1,46 +1,48 @@
 package com.fabio.vendas.controllers;
 
 
-import com.fabio.vendas.models.Cliente;
+import com.fabio.vendas.dtos.requests.ClienteResquest;
+import com.fabio.vendas.dtos.responses.ClienteResponse;
 import com.fabio.vendas.services.ClienteService;
-import com.fabio.vendas.validations.Validacao;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/cliente")
-public class ClienteController extends Validacao {
+public class ClienteController{
 
-    @Autowired
-    private ClienteService clienteService;
+    private final ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<Cliente> criar(@RequestBody @Valid Cliente cliente) {
-        Validacao validacao =new Validacao();
-        return ResponseEntity.created(null).body(clienteService.criar(cliente));
+    public ResponseEntity<ClienteResponse> criar(@RequestBody ClienteResquest clienteResquest) {
+        ClienteResponse clienteResponse = clienteService.criar(clienteResquest);
+        return ResponseEntity.created(null).body(clienteResponse);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Cliente> atualizar(@RequestBody Cliente cliente, @PathVariable Long id) {
-        Cliente clienteAtualizado = clienteService.atualizar(cliente, id);
-        return ResponseEntity.ok().body(clienteAtualizado);
+    public ResponseEntity<ClienteResponse> atualizar(@RequestBody ClienteResquest clienteResquest, @PathVariable Long id) {
+        return ResponseEntity.ok().body(clienteService.atualizar(clienteResquest, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         clienteService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> listar() {
-        List<Cliente> listaCliente = clienteService.listar();
+    public ResponseEntity<List<ClienteResponse>> listar() {
+        List<ClienteResponse> listaCliente = clienteService.listar();
         return ResponseEntity.ok().body(listaCliente);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteResponse> obter(@PathVariable Long id){
+        return ResponseEntity.ok(clienteService.Obter(id));
+    }
 
 }

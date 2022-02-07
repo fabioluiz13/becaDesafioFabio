@@ -1,30 +1,37 @@
 package com.fabio.vendas.services;
 
-import com.fabio.vendas.dtos.ProdutoDto;
+import com.fabio.vendas.dtos.requests.ProdutoRequest;
+import com.fabio.vendas.dtos.responses.ProdutoResponse;
+import com.fabio.vendas.mappers.MapperProdutoAtualizar;
+import com.fabio.vendas.mappers.MapperProdutoRequestToProduto;
+import com.fabio.vendas.mappers.MapperProdutoToProdutoResponse;
 import com.fabio.vendas.models.Produto;
 import com.fabio.vendas.repositories.ProdutoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.ResolutionException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProdutoService {
 
-    @Autowired
-    private ProdutoRepository produtoRepository;
+    private final ProdutoRepository produtoRepository;
+    private final MapperProdutoToProdutoResponse produtoResponse;
+    private final MapperProdutoRequestToProduto produtoRequestToProduto;
+    private final MapperProdutoAtualizar produtoAtualizar;
 
-    public ProdutoDto criar(ProdutoDto produtoDto) {
-        Produto produto = new Produto(produtoDto);
-        return new ProdutoDto(produtoRepository.save(produto));
+    public ProdutoResponse criar(ProdutoRequest produtoRequest) {
+
+        Produto produto = produtoRequestToProduto.toModel(produtoRequest);
+        return produtoResponse.toResponse(produtoRepository.save(produto));
     }
 
-    public ProdutoDto atualizar(ProdutoDto produtoDto, Long id) {
-        return new ProdutoDto(produtoRepository.findById(id)
-                .map(produto -> produtoRepository.save(new Produto(produtoDto)))
-                .orElseThrow(ResolutionException::new));
+    public ProdutoResponse atualizar(ProdutoRequest produtoRequest, Long id) {
+        Produto produto =produtoRepository.findById(id).get();
+        produtoAtualizar.atualizar(produtoRequest, produto);
+        return produtoResponse.toResponse(produtoRepository.save(produto));
     }
 
     public void deletar(Long id) {
@@ -32,20 +39,18 @@ public class ProdutoService {
 
     }
 
-    public List<ProdutoDto> listar() {
-        List<ProdutoDto> dtos = new ArrayList<>();
-        List<Produto> listaProduto = produtoRepository.findAll();
-
-        listaProduto.stream().forEach(produto -> dtos.add(new ProdutoDto(produto)));
-
-        return dtos;
+    public List<ProdutoResponse> listar() {
+        List<Produto> listaProdutos = produtoRepository.findAll();
+       return listaProdutos
+               .stream()
+               .map(produtoResponse::toResponse)
+               .collect(Collectors.toList());
     }
 
-    public ProdutoDto obter(Long id) {
-        Produto produtoRecebido = produtoRepository.findById(id).get();
-        return  new ProdutoDto(produtoRecebido);
+    public ProdutoResponse obter(Long id) {
+        Produto produto = produtoRepository.findById(id).get();
+        return  produtoResponse.toResponse(produto);
 
     }
-
 }
 

@@ -1,6 +1,7 @@
 package com.fabio.vendas.controllers;
 
-import com.fabio.vendas.dtos.ItemPedidoDto;
+import com.fabio.vendas.dtos.requests.ItemPedidoRequest;
+import com.fabio.vendas.dtos.responses.ItemPedidoResponse;
 import com.fabio.vendas.services.ItemPedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,17 +14,17 @@ import java.util.List;
 @RequestMapping(value = "/item")
 public class ItemPedidoController {
 
-
     private final ItemPedidoService itemPedidoService;
 
     @PostMapping
-    public ResponseEntity<ItemPedidoDto> criar(@RequestBody ItemPedidoDto itemPedidoDto) {
-        return ResponseEntity.created(null).body(itemPedidoService.criar(itemPedidoDto));
+    public ResponseEntity<ItemPedidoResponse> criar(@RequestBody ItemPedidoRequest itemPedidoRequest) {
+       ItemPedidoResponse itemPedidoResponse = itemPedidoService.criar(itemPedidoRequest);
+        return ResponseEntity.created(null).body(itemPedidoResponse);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ItemPedidoDto> atualizar(@RequestBody ItemPedidoDto itemPedidoDto, @PathVariable Long id) {
-        return ResponseEntity.ok().body(itemPedidoService.atualizar(itemPedidoDto, id));
+    public ResponseEntity<ItemPedidoResponse> atualizar(@RequestBody ItemPedidoRequest itemPedidoRequest, @PathVariable Long id) {
+        return ResponseEntity.ok().body(itemPedidoService.atualizar(itemPedidoRequest, id));
     }
 
     @DeleteMapping("/{id}")
@@ -32,15 +33,14 @@ public class ItemPedidoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemPedidoDto>> listar() {
-        List<ItemPedidoDto> listaDto = itemPedidoService.listar();
-        return ResponseEntity.ok(listaDto);
+    public ResponseEntity<List<ItemPedidoResponse>> listar() {
+        List<ItemPedidoResponse>  listaItem = itemPedidoService.listar();
+        return ResponseEntity.ok(listaItem);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ItemPedidoDto> obter(@PathVariable Long id) {
-        ItemPedidoDto itemPedido = itemPedidoService.obter(id);
-        return ResponseEntity.ok(itemPedido);
+    public ResponseEntity<ItemPedidoResponse> obter(@PathVariable Long id) {
+        return ResponseEntity.ok(itemPedidoService.obter(id));
     }
 
 }

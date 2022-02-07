@@ -1,51 +1,53 @@
 package com.fabio.vendas.services;
 
-import com.fabio.vendas.dtos.ItemPedidoDto;
+import com.fabio.vendas.dtos.requests.ItemPedidoRequest;
+import com.fabio.vendas.dtos.responses.ItemPedidoResponse;
+import com.fabio.vendas.mappers.MapperItemPedidoAtualizar;
+import com.fabio.vendas.mappers.MapperItemToItemPedidoResponse;
+import com.fabio.vendas.mappers.MapperItemToRequestItemPedido;
 import com.fabio.vendas.models.ItemPedido;
 import com.fabio.vendas.repositories.ItemPedidoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.ResolutionException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ItemPedidoService {
 
-    @Autowired
-    private ProdutoService produtoService;
+    private final ItemPedidoRepository itemPedidoRepository;
+    private final MapperItemToItemPedidoResponse pedidoResponse;
+    private final MapperItemToRequestItemPedido itemToRequestItemPedido;
+    private final MapperItemPedidoAtualizar itemPedidoAtualizar;
 
-    @Autowired
-    private ItemPedidoRepository itemPedidoRepository;
-
-    public ItemPedidoDto criar(ItemPedidoDto pedidoDto) {
-        ItemPedido pedido = new ItemPedido(pedidoDto);
-        return  new ItemPedidoDto(itemPedidoRepository.save(pedido));
+    public ItemPedidoResponse criar(ItemPedidoRequest pedidoRequest) {
+        ItemPedido pedido = itemToRequestItemPedido.toModel(pedidoRequest);
+        return pedidoResponse.toResponse( itemPedidoRepository.save(pedido));
     }
 
-
-    public ItemPedidoDto atualizar( ItemPedidoDto itemPedidoDto, Long id) {
-        return new ItemPedidoDto(itemPedidoRepository.findById(id)
-                .map(itemPedido -> itemPedidoRepository.save(new ItemPedido(itemPedidoDto)))
-                .orElseThrow(ResolutionException::new));
+    public ItemPedidoResponse atualizar( ItemPedidoRequest pedidoRequest, Long id) {
+        ItemPedido itemPedido = itemPedidoRepository.findById(id).get();
+        itemPedidoAtualizar.atulaizar(pedidoRequest, itemPedido);
+        return pedidoResponse.toResponse(itemPedidoRepository.save(itemPedido));
     }
 
     public void deletar( Long id) {
         itemPedidoRepository.deleteById(id);
     }
 
-    public List<ItemPedidoDto> listar() {
-        List<ItemPedidoDto> itemPedidoDtos = new ArrayList<>();
-        List<ItemPedido> listaProduto = itemPedidoRepository.findAll();
-        listaProduto.stream().forEach(item -> itemPedidoDtos.add(new ItemPedidoDto(item)));
-
-        return itemPedidoDtos;
+    public List<ItemPedidoResponse> listar() {
+        List<ItemPedido> listaItem = itemPedidoRepository.findAll();
+        return listaItem
+                .stream()
+                .map(pedidoResponse::toResponse)
+                .collect(Collectors.toList());
     }
 
-    public ItemPedidoDto obter(Long id) {
+    public ItemPedidoResponse obter(Long id) {
         ItemPedido itemPedido = itemPedidoRepository.findById(id).get();
-        return new ItemPedidoDto(itemPedido);
+        return pedidoResponse.toResponse(itemPedido);
 
     }
 }
