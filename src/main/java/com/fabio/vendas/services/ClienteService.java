@@ -22,7 +22,6 @@ public class ClienteService {
     private final MapperClienteAtualizar clienteAtualizar;
     private final MapperClienteToClienteResponse mapperClienteToClienteResponse;
 
-
     public ClienteResponse criar(ClienteResquest clienteResquest) {
         Cliente cliente= mapper.toModel(clienteResquest);
         return mapperClienteToClienteResponse.toResponse(repository.save(cliente));

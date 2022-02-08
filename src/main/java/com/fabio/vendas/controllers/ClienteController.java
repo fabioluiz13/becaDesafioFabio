@@ -6,6 +6,7 @@ import com.fabio.vendas.dtos.responses.ClienteResponse;
 import com.fabio.vendas.services.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class ClienteController{
     private final ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<ClienteResponse> criar(@RequestBody ClienteResquest clienteResquest) {
+    public ResponseEntity<ClienteResponse> criar(@RequestBody @Validated ClienteResquest clienteResquest) {
         ClienteResponse clienteResponse = clienteService.criar(clienteResquest);
         return ResponseEntity.created(null).body(clienteResponse);
     }
@@ -44,5 +45,4 @@ public class ClienteController{
     public ResponseEntity<ClienteResponse> obter(@PathVariable Long id){
         return ResponseEntity.ok(clienteService.Obter(id));
     }
-
 }

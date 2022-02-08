@@ -22,7 +22,6 @@ public class PedidoController {
         return ResponseEntity.created(null).body(pedidoResponse);
     }
 
-
     @PatchMapping("/{id}")
     public ResponseEntity<PedidoResponse> atualizar(@RequestBody PedidoRequest pedidoRequest, @PathVariable Long id) {
         return ResponseEntity.ok().body(pedidoService.atualizar(pedidoRequest, id));
@@ -44,5 +43,4 @@ public class PedidoController {
     public ResponseEntity<PedidoResponse> obter(@PathVariable Long id){
         return ResponseEntity.ok(pedidoService.obter(id));
     }
-
 }

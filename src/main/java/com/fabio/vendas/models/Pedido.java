@@ -16,6 +16,4 @@ public class Pedido {
 
     @OneToOne
     private Cliente cliente;
-
-
 }

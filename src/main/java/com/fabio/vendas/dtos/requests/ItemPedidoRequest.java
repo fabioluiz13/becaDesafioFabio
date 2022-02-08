@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class ItemPedidoRequest {
 
-
     private Double preco;
     private int quantidade;
     private ProdutoRequest produto;

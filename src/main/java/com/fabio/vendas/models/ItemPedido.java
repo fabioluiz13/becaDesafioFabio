@@ -16,5 +16,4 @@ public class ItemPedido  {
 
     @OneToOne
     private Produto produto;
-
 }

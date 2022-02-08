@@ -7,8 +7,6 @@ import java.time.LocalDate;
 @Data
 public class PedidoRequest {
 
-
     private LocalDate data;
     private ClienteResquest cliente;
-
 }

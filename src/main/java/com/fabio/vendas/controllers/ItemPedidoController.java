@@ -42,5 +42,4 @@ public class ItemPedidoController {
     public ResponseEntity<ItemPedidoResponse> obter(@PathVariable Long id) {
         return ResponseEntity.ok(itemPedidoService.obter(id));
     }
-
 }

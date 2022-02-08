@@ -50,7 +50,6 @@ public class ProdutoService {
     public ProdutoResponse obter(Long id) {
         Produto produto = produtoRepository.findById(id).get();
         return  produtoResponse.toResponse(produto);
-
     }
 }
 

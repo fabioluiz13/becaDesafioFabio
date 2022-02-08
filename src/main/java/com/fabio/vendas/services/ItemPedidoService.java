@@ -48,6 +48,5 @@ public class ItemPedidoService {
     public ItemPedidoResponse obter(Long id) {
         ItemPedido itemPedido = itemPedidoRepository.findById(id).get();
         return pedidoResponse.toResponse(itemPedido);
-
     }
 }

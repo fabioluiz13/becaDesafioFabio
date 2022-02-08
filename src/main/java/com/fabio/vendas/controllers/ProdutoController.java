@@ -42,6 +42,5 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoResponse> obter(@PathVariable Long id) {
         return ResponseEntity.ok(produtoService.obter(id));
-
     }
 }
