@@ -1,58 +1,29 @@
 package com.fabio.vendas.models;
 
+import com.fabio.vendas.errors.ValidationException;
+import lombok.Data;
+import org.hibernate.validator.constraints.br.CPF;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
+@Data
 @Entity
 public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Campo não informado!")
     private String nome;
+    @CPF(message = "Campo inválido!")
+    @NotBlank(message = "O campo deve conter CPF válido!")
     private String cpf;
+    @NotBlank(message = "O campo deve conter o endereço!")
     private String endereco;
 
-    public Cliente(){}
 
-    public Cliente(Long id, String nome, String cpf, String endereco) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.endereco = endereco;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
 }

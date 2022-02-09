@@ -1,44 +1,54 @@
 package com.fabio.vendas.services;
 
+import com.fabio.vendas.dtos.requests.ClienteResquest;
+import com.fabio.vendas.dtos.responses.ClienteResponse;
+import com.fabio.vendas.errors.ValidationException;
+import com.fabio.vendas.mappers.MapperClienteRequestToCliente;
+import com.fabio.vendas.mappers.MapperClienteAtualizar;
+import com.fabio.vendas.mappers.MapperClienteToClienteResponse;
 import com.fabio.vendas.models.Cliente;
 import com.fabio.vendas.repositories.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteService  {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository repository;
+    private final MapperClienteRequestToCliente mapper;
+    private final MapperClienteAtualizar clienteAtualizar;
+    private final MapperClienteToClienteResponse mapperClienteToClienteResponse;
 
-    public Cliente criar(Cliente cliente) {
-        Cliente clienteCriado = clienteRepository.save(cliente);
-        return clienteCriado;
+    public ClienteResponse criar(ClienteResquest clienteResquest) {
+        Cliente cliente= mapper.toModel(clienteResquest);
+        return mapperClienteToClienteResponse.toResponse(repository.save(cliente));
     }
 
-    public Cliente atualizar(Cliente cliente, Long id) {
-        Cliente obterCliente = this.Obter(id);
-        obterCliente.setNome(cliente.getNome());
-        obterCliente.setCpf(cliente.getCpf());
-        obterCliente.setEndereco(cliente.getEndereco());
-        Cliente cliente1 = clienteRepository.save(obterCliente);
-        return cliente1;
+    public ClienteResponse atualizar(ClienteResquest clienteResquest, Long id) {
 
+        Cliente cliente = repository.findById(id).get();
+        clienteAtualizar.atualizar(clienteResquest, cliente);
+        return mapperClienteToClienteResponse.toResponse(repository.save(cliente));
     }
 
     public void deletar(Long id) {
-      clienteRepository.deleteById(id);
+            repository.deleteById(id);
     }
 
-    public List<Cliente> listar() {
-        return clienteRepository.findAll();
-
+    public List<ClienteResponse> listar() {
+        List<Cliente> listaClientes = repository.findAll();
+        return listaClientes
+                .stream()
+                .map(mapperClienteToClienteResponse::toResponse)
+                .collect(Collectors.toList());
     }
-    public Cliente Obter (Long id){
-        Optional<Cliente> obterCliente = clienteRepository.findById(id);
-        return obterCliente.get();
+
+    public ClienteResponse Obter(Long id) {
+        Cliente cliente = repository.findById(id).get();
+        return mapperClienteToClienteResponse.toResponse(cliente);
     }
 }

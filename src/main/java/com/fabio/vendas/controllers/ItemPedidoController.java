@@ -1,49 +1,45 @@
 package com.fabio.vendas.controllers;
 
-import com.fabio.vendas.models.Cliente;
-import com.fabio.vendas.models.ItemPedido;
+import com.fabio.vendas.dtos.requests.ItemPedidoRequest;
+import com.fabio.vendas.dtos.responses.ItemPedidoResponse;
 import com.fabio.vendas.services.ItemPedidoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/item")
 public class ItemPedidoController {
 
-    @Autowired
-    private ItemPedidoService itemPedidoService;
+    private final ItemPedidoService itemPedidoService;
 
     @PostMapping
-    public ResponseEntity<ItemPedido> Criar(@RequestBody ItemPedido itemPedido) {
-        ItemPedido itemCriado = itemPedidoService.Criar(itemPedido);
-        return ResponseEntity.created(null).body(itemCriado);
+    public ResponseEntity<ItemPedidoResponse> criar(@RequestBody ItemPedidoRequest itemPedidoRequest) {
+       ItemPedidoResponse itemPedidoResponse = itemPedidoService.criar(itemPedidoRequest);
+        return ResponseEntity.created(null).body(itemPedidoResponse);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ItemPedido> atualizar(@RequestBody ItemPedido itemPedido, @PathVariable Long id) {
-        ItemPedido itemAtualizado = itemPedidoService.atualizar(itemPedido, id);
-        return ResponseEntity.ok().body(itemAtualizado);
+    public ResponseEntity<ItemPedidoResponse> atualizar(@RequestBody ItemPedidoRequest itemPedidoRequest, @PathVariable Long id) {
+        return ResponseEntity.ok().body(itemPedidoService.atualizar(itemPedidoRequest, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletar(@PathVariable Long id) {
-        itemPedidoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemPedido>> listar() {
-        List<ItemPedido> pedidos = itemPedidoService.listar();
-        return ResponseEntity.ok().body(pedidos);
+    public ResponseEntity<List<ItemPedidoResponse>> listar() {
+        List<ItemPedidoResponse>  listaItem = itemPedidoService.listar();
+        return ResponseEntity.ok(listaItem);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ItemPedido> obter(@PathVariable Long id){
-        ItemPedido pedidoObtido = itemPedidoService.obter(id);
-        return ResponseEntity.ok(pedidoObtido);
+    public ResponseEntity<ItemPedidoResponse> obter(@PathVariable Long id) {
+        return ResponseEntity.ok(itemPedidoService.obter(id));
     }
-
 }

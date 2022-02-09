@@ -1,47 +1,46 @@
 package com.fabio.vendas.controllers;
 
-import com.fabio.vendas.models.Produto;
+import com.fabio.vendas.dtos.requests.ProdutoRequest;
+import com.fabio.vendas.dtos.responses.ProdutoResponse;
 import com.fabio.vendas.services.ProdutoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/produto")
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoService produtoService;
+    private final ProdutoService produtoService;
 
     @PostMapping
-    public ResponseEntity<Produto> criar(@RequestBody Produto produto){
-        Produto materiaCriada = produtoService.criar(produto);
-        return ResponseEntity.created(null).body(materiaCriada);
+    public ResponseEntity<ProdutoResponse> criar(@RequestBody ProdutoRequest produtoRequest) {
+        ProdutoResponse produtoResponse = produtoService.criar(produtoRequest);
+        return ResponseEntity.created(null).body(produtoResponse);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(@RequestBody Produto produto, @PathVariable Long id){
-        Produto produtoAtualizado = produtoService.atualizar(produto, id);
-        return  ResponseEntity.ok().body(produtoAtualizado);
+    public ResponseEntity<ProdutoResponse> atualizar(@RequestBody ProdutoRequest produtoRequest, @PathVariable Long id) {
+        return ResponseEntity.ok().body(produtoService.atualizar(produtoRequest, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         produtoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> listar(){
-        List<Produto> listaProdutos = produtoService.listar();
-        return  ResponseEntity.ok(listaProdutos);
+    public ResponseEntity<List<ProdutoResponse>> listar() {
+        List<ProdutoResponse> listaProduto = produtoService.listar();
+        return ResponseEntity.ok().body(listaProduto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> obter(@PathVariable Long id){
-       Produto produtoObtido =  produtoService.obter(id);
-        return ResponseEntity.ok(produtoObtido);
-   }
+    public ResponseEntity<ProdutoResponse> obter(@PathVariable Long id) {
+        return ResponseEntity.ok(produtoService.obter(id));
+    }
 }
