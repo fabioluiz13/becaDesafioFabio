@@ -3,18 +3,24 @@ package com.fabio.vendas.controllers;
 
 import com.fabio.vendas.dtos.requests.ClienteResquest;
 import com.fabio.vendas.dtos.responses.ClienteResponse;
+import com.fabio.vendas.errors.ValidationException;
 import com.fabio.vendas.services.ClienteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/cliente")
-public class ClienteController{
+public class ClienteController  {
 
     private final ClienteService clienteService;
 
@@ -42,7 +48,7 @@ public class ClienteController{
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponse> obter(@PathVariable Long id){
+    public ResponseEntity<ClienteResponse> obter(@PathVariable Long id) {
         return ResponseEntity.ok(clienteService.Obter(id));
     }
 }

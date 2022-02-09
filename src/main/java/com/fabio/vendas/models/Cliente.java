@@ -1,5 +1,6 @@
 package com.fabio.vendas.models;
 
+import com.fabio.vendas.errors.ValidationException;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -23,4 +24,6 @@ public class Cliente {
     private String cpf;
     @NotBlank(message = "O campo deve conter o endereço!")
     private String endereco;
+
+
 }

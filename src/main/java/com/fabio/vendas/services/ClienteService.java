@@ -2,6 +2,7 @@ package com.fabio.vendas.services;
 
 import com.fabio.vendas.dtos.requests.ClienteResquest;
 import com.fabio.vendas.dtos.responses.ClienteResponse;
+import com.fabio.vendas.errors.ValidationException;
 import com.fabio.vendas.mappers.MapperClienteRequestToCliente;
 import com.fabio.vendas.mappers.MapperClienteAtualizar;
 import com.fabio.vendas.mappers.MapperClienteToClienteResponse;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ClienteService {
+public class ClienteService  {
 
     private final ClienteRepository repository;
     private final MapperClienteRequestToCliente mapper;
@@ -35,7 +36,7 @@ public class ClienteService {
     }
 
     public void deletar(Long id) {
-        repository.deleteById(id);
+            repository.deleteById(id);
     }
 
     public List<ClienteResponse> listar() {
