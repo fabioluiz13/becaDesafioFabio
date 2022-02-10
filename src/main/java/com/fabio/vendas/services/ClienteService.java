@@ -2,9 +2,8 @@ package com.fabio.vendas.services;
 
 import com.fabio.vendas.dtos.requests.ClienteResquest;
 import com.fabio.vendas.dtos.responses.ClienteResponse;
-import com.fabio.vendas.errors.ValidationException;
-import com.fabio.vendas.mappers.MapperClienteRequestToCliente;
 import com.fabio.vendas.mappers.MapperClienteAtualizar;
+import com.fabio.vendas.mappers.MapperClienteRequestToCliente;
 import com.fabio.vendas.mappers.MapperClienteToClienteResponse;
 import com.fabio.vendas.models.Cliente;
 import com.fabio.vendas.repositories.ClienteRepository;
