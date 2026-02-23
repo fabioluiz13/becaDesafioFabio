@@ -1,7 +1,7 @@
 # becaDesafioFabioLuiz
 
 # Sobre o projeto
-- Sistema para loja de vedas
+- Sistema para loja de vendas
 
 ## Modelo conceitual
 <img width="536" alt="diagramaDb" src="https://user-images.githubusercontent.com/98011084/151227453-619f3106-711f-4ef0-bf84-da9be93145dd.png">
